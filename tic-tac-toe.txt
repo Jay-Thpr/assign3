@@ -1,0 +1,31 @@
+installing/configuring: none :D
+
+Started from the provided starter code. The app already mounted through src/main.jsx, and src/App.jsx started as a sample placeholder instead of the game.
+
+Followed the React tic-tac-toe tutorial in src/App.jsx. Started by making a Square component that just returned a button. This was a small function but kind of an important one, since the whole board is built out of reusable squares.
+
+Added a Board component to render the 3x3 layout. At first this was basically just grouping the buttons into board-row divs so the board displayed correctly instead of everything being in one line.
+
+Changed Square so it could take in a value prop and display whatever was passed to it. This made it possible for the Board component to control what each square showed.
+
+Used onClick with a handleClick function to make the board interactive. One thing I noticed here was that React wants the click handler passed as a function, not called immediately.
+
+Used useState to store the board state. Regular variables/global constants do not work for this because React will not re-render the UI when they change. I stored the board as an array of 9 values initialized with Array(9).fill(null).
+
+Updated handleClick to take in an index parameter so each square could update the right position in the board array. Used slice() to make a copy of the array before editing it instead of mutating the original directly.
+
+Added xIsNext so the game alternated between X and O instead of always placing X. Also added a check so clicking a filled square would do nothing.
+
+Added calculateWinner to check the 8 possible winning lines. Used that to show status text for either the next player or the winner, and to stop the game once somebody had already won.
+
+After that I went through the history/time travel section of the tutorial too. I added the Game component above Board and moved the main game state there instead of keeping it all inside Board.
+
+Added history state to store previous board states and currentMove state to keep track of which move was being viewed. Then used currentSquares = history[currentMove] so the board could render either the latest move or an older one.
+
+Implemented handlePlay so each move appended a new board state into history. Also added jumpTo so clicking an old move in the history list would restore the board to that step.
+
+Built the move list with history.map(...) and added the move number buttons on the side. This made the time travel part work.
+
+Followed the cleanup step from the tutorial where xIsNext was no longer stored separately, and instead was computed from whether currentMove was even or odd. That made the state simpler and less redundant.
+
+Tested the tic-tac-toe version in the browser with ./helper dev while building it. Verified that the board started empty, clicks updated the right squares, turns alternated correctly, filled squares could not be overwritten, a winner stopped future moves, and the history buttons restored older board states correctly.

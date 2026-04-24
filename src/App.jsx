@@ -48,8 +48,9 @@ export default function App() {
     ).length;
 
     if (playerPieceCount >= 3) {
+
       if(selectedSquare === null){
-        if (squares[i] == currentPlayer) {
+        if (squares[i] === currentPlayer) {
           setSelectedSquare(i);
         }
         return;
@@ -64,6 +65,16 @@ export default function App() {
         setSelectedSquare(null);
         return;
       }
+      if(squares[4] === currentPlayer){
+        const simSquares = squares.slice();
+        simSquares[selectedSquare] = null;
+        simSquares[i] = currentPlayer;
+        if(!calculateWinner(simSquares) && selectedSquare !== 4){
+          setSelectedSquare(null);
+          return;
+        }
+      }
+
       nextSquares[selectedSquare] = null;
       nextSquares[i] = currentPlayer;
       setSquares(nextSquares);
