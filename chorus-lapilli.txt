@@ -1,0 +1,30 @@
+installing/configuring: none
+
+Started from the completed tic-tac-toe tutorial version and then simplified it for chorus lapilli. Since time travel isn't required, I removed the Game/history wrapper and moved back to a simpler structure with App holding the current board state directly.
+
+Kept the same Square component and Board component shape from tic-tac-toe so the board still rendered as 9 clickable buttons with the same square class the tests expect.
+
+Changed the main game logic in handleClick so the game no longer behaved like normal tic-tac-toe after the first three moves for each player.
+
+First added logic to count how many pieces the current player already had on the board by filtering the squares array for either X or O depending on whose turn it was.
+
+Used that count to enforce maximum of 3 pieces. If the current player had fewer than 3 pieces, a click still placed a new piece like regular tic-tac-toe. If the current player already had 3 pieces, the code switched into movement mode instead of allowing a fourth placement.
+
+Added selectedSquare state to support the required two-click move behavior. The first click in movement mode selects one of the current player’s existing pieces. The second click chooses the destination square.
+
+Updated the movement logic so that if a player already had 3 pieces:
+- clicking one of their own pieces selected it,
+- clicking an occupied destination canceled the move and reset selection,
+- clicking an empty destination attempted to move the selected piece.
+
+Made invalid two-click moves revert back to the start of the move by clearing selectedSquare and leaving the board unchanged.
+
+Added an isAdjacent helper function to enforce that pieces can only move to neighboring squares. I converted each tile index into row/column coordinates and compared the row and column differences so that horizontal, vertical, and diagonal one-step moves were allowed, while jumps across the board were rejected.
+
+Kept calculateWinner from tic-tac-toe since the winning condition is still three in a row. The app still checks for a winner before allowing any further action.
+
+Added the special center-square rule. If it is the player’s turn, they already have 3 pieces, and one of those pieces is in the center square, then any move that does not move the center piece must immediately create a win. To check this, I simulated the move on a copied board and rejected it unless it either vacated the center or produced a winning board.
+
+Kept the status text so the UI still shows whose turn it is or who won. The game also still blocks all moves once a winner exists.
+
+Tested the chorus lapilli behavior in the browser while building it. Verified that each player could only place 3 pieces, that later turns required selecting and moving an existing piece, that non-adjacent moves were rejected, that invalid second clicks reset the move, and that no more moves happened after a winner was found.
