@@ -28,3 +28,5 @@ Added the special center-square rule. If it is the player’s turn, they already
 Kept the status text so the UI still shows whose turn it is or who won. The game also still blocks all moves once a winner exists.
 
 Tested the chorus lapilli behavior in the browser while building it. Verified that each player could only place 3 pieces, that later turns required selecting and moving an existing piece, that non-adjacent moves were rejected, that invalid second clicks reset the move, and that no more moves happened after a winner was found.
+
+Also added tests in test_chorus_lapilli.py to check that the game blocks extra moves after a win, refuses a fourth piece placement, allows a valid adjacent move, and rejects a non-adjacent move without changing the board.

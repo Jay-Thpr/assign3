@@ -155,6 +155,72 @@ class TestChorusLapilli(unittest.TestCase):
         tiles[0].click()
         self.assertTileIs(tiles[0], self.SYMBOL_X)
 
+    def test_no_moves_after_winner(self):
+        '''Check that no more moves can be made after a player wins.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X
+        tiles[3].click()  # O
+        tiles[1].click()  # X
+        tiles[4].click()  # O
+        tiles[2].click()  # X wins
+
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[1], self.SYMBOL_X)
+        self.assertTileIs(tiles[2], self.SYMBOL_X)
+
+        tiles[5].click()  # Should do nothing because game is over
+        self.assertTileIs(tiles[5], self.SYMBOL_BLANK)
+
+    def test_cannot_place_fourth_piece(self):
+        '''Check that a player cannot place a fourth piece.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X
+        tiles[3].click()  # O
+        tiles[1].click()  # X
+        tiles[4].click()  # O
+        tiles[5].click()  # X
+        tiles[7].click()  # O
+
+        tiles[8].click()  # X already has 3 pieces, so this should do nothing
+        self.assertTileIs(tiles[8], self.SYMBOL_BLANK)
+
+    def test_adjacent_move_repositions_piece(self):
+        '''Check that selecting a piece and clicking an adjacent empty tile moves it.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X
+        tiles[2].click()  # O
+        tiles[1].click()  # X
+        tiles[5].click()  # O
+        tiles[3].click()  # X
+        tiles[8].click()  # O
+
+        tiles[3].click()  # Select X piece
+        tiles[4].click()  # Move to adjacent empty tile
+
+        self.assertTileIs(tiles[3], self.SYMBOL_BLANK)
+        self.assertTileIs(tiles[4], self.SYMBOL_X)
+
+    def test_invalid_non_adjacent_move_leaves_board_unchanged(self):
+        '''Check that a non-adjacent move is rejected and the board stays the same.'''
+        tiles = self.driver.find_elements(By.XPATH, self.BOARD_TILE_XPATH)
+
+        tiles[0].click()  # X
+        tiles[2].click()  # O
+        tiles[1].click()  # X
+        tiles[5].click()  # O
+        tiles[3].click()  # X
+        tiles[8].click()  # O
+
+        tiles[0].click()  # Select X piece
+        tiles[7].click()  # Non-adjacent empty tile, should fail
+
+        self.assertTileIs(tiles[0], self.SYMBOL_X)
+        self.assertTileIs(tiles[7], self.SYMBOL_BLANK)
+
+
 
 # ================= [DO NOT MAKE ANY CHANGES BELOW THIS LINE] =================
 
